@@ -20,8 +20,5 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*i
 
-# Bun
-bun.lockb
-
 # Jetbrains IDEs
 .idea

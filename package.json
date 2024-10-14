@@ -24,6 +24,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"postgres": "^3.4.4"
+		"@auth/sveltekit": "^1.7.0",
+		"postgres": "^3.4.4",
+		"redis": "^4.7.0"
 	}
 }
