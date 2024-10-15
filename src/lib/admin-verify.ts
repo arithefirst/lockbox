@@ -5,7 +5,6 @@ async function isAdmin(cookies: Cookies) :Promise<boolean> {
     const adminToken = cookies.get("adminSessionToken");
     if (adminToken !== undefined) {
         const keyRow = await sql`SELECT * FROM admin_keys WHERE key = ${adminToken} LIMIT 1`
-        console.log(keyRow);
         if (keyRow.length !== 0) {
             // Delete entry if expired
             if (keyRow[0]["expires"] < Math.floor(Date.now() / 1000)) {
