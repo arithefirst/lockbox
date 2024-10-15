@@ -6,7 +6,13 @@ CREATE TABLE passwords (
     uploads text[]
 );
 
-CREATE TABLE adminkeys (
-    key text PRIMARY KEY UNIQUE,
-    expires bigint
+CREATE TABLE admin_keys (
+                       key text PRIMARY KEY UNIQUE,
+                       expires bigint
+);
+
+CREATE TABLE admin_logins (
+                       username text unique,
+                       salt text,
+                       hash text
 );

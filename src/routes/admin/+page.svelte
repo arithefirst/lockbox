@@ -1,0 +1,1 @@
+<h1 class="text-xl">Welcome to the Admin page!</h1>

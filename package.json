@@ -25,6 +25,7 @@
 	"type": "module",
 	"dependencies": {
 		"@auth/sveltekit": "^1.7.0",
+		"@types/node": "^22.7.5",
 		"postgres": "^3.4.4",
 		"redis": "^4.7.0"
 	}
