@@ -18,7 +18,6 @@ export const actions = {
 
         // Query for the password
         const query = await sql`SELECT * FROM passwords WHERE password = ${pass}`;
-        console.log(query);
 
         // If it doesn't exist don't save the file
         if (query.length === 0) {
