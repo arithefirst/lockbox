@@ -5,3 +5,8 @@ CREATE TABLE passwords (
     access_ips text[],
     uploads text[]
 );
+
+CREATE TABLE adminkeys (
+    key text PRIMARY KEY UNIQUE,
+    expires bigint
+);
