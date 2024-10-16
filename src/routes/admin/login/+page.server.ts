@@ -47,6 +47,6 @@ export const actions = {
         VALUES (${token}, ${expiry})`
 
         // Add cookie to browser
-        cookies.set("adminSessionToken", token, {path: "/admin"})
+        cookies.set("adminSessionToken", token, {path: "/"})
     }
 }
