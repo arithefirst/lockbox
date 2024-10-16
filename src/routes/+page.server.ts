@@ -1,7 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import sql from '$lib/SQL'
 import makeId from '$lib/makeid'
-import { writeFileSync, existsSync } from 'fs';
+import { writeFileSync, existsSync } from 'node:fs';
 
 export const actions = {
     default: async ({ request }) => {

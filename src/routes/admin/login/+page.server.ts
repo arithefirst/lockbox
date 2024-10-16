@@ -1,6 +1,6 @@
 import isAdmin from "$lib/admin-verify.js";
 import sql from "$lib/SQL"
-import { createHash } from 'crypto'
+import { createHash } from 'node:crypto'
 import makeId from '$lib/makeid'
 import {fail, redirect} from "@sveltejs/kit";
 

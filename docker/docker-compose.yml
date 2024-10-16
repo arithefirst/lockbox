@@ -1,0 +1,22 @@
+services:
+  app:
+    container_name: lockbox
+    image: lockbox:latest
+    network_mode: host
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ./uploads/:/usr/share/lockbox/
+  db:
+    container_name: postgres
+    image: postgres:latest
+    network_mode: host
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lockbox
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./pgdata:/var/lib/postgresql/data
