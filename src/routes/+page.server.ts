@@ -28,7 +28,7 @@ export const actions = {
         }
 
         // Create prefix that gets added if a file already exists
-        const prefix = existsSync("src/routes/admin/files/" + file.name)? makeId(5)+"-": ""
+        const prefix = existsSync("/usr/share/lockbox/" + file.name)? makeId(5)+"-": ""
 
         // If the password is at it's max uses
         if (query[0]["max_uses"] == query[0]["times_used"]+1) {
@@ -40,8 +40,8 @@ export const actions = {
             uploads=array_append(uploads, ${prefix+file.name})`
         }
 
-        // Write the file to the src/routes/admin/files folder, write it to 1-{filename}
-        writeFileSync(`src/routes/admin/files/${prefix+file.name}`, Buffer.from(await file.arrayBuffer()));
+        // Write the file to the /usr/share/lockbox dir, write it to 1-{filename}
+        writeFileSync(`/usr/share/lockbox/${prefix+file.name}`, Buffer.from(await file.arrayBuffer()));
 
         return {
             success: true
