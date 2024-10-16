@@ -16,3 +16,7 @@ CREATE TABLE admin_logins (
                        salt text,
                        hash text
 );
+
+-- Set default login of "admin" and "changeme"
+INSERT INTO admin_logins (username, salt, hash) VALUES (admin, 2mm75gadHfyz8jEg,
+221ebd6085bb510914a295e7285b9a8dcbc957762ee844a7a9b3ff058bbbb687);
