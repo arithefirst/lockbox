@@ -1,17 +1,18 @@
-CREATE TABLE passwords (
+CREATE TABLE IF NOT EXISTS passwords (
                        password text PRIMARY KEY UNIQUE,
                        max_uses int,
                        times_used int,
                        access_ips text[],
-                       uploads text[]
+                       uploads text[],
+                       date int
 );
 
-CREATE TABLE admin_keys (
+CREATE TABLE IF NOT EXISTS admin_keys (
                        key text PRIMARY KEY UNIQUE,
                        expires bigint
 );
 
-CREATE TABLE admin_logins (
+CREATE TABLE IF NOT EXISTS admin_logins (
                        username text unique,
                        salt text,
                        hash text
