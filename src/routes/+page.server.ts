@@ -37,7 +37,7 @@ export const actions = {
         } else {
             // Else append to uploads, add 1 to times used
             const update = await sql`UPDATE passwords SET times_used = ${query[0]["times_used"]+1},
-            uploads=array_append(uploads, ${prefix+file.name})`
+            uploads=array_append(uploads, ${prefix+file.name}) WHERE password = ${pass}`
         }
 
         // Write the file to the /usr/share/lockbox dir, write it to 1-{filename}
