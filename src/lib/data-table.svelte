@@ -9,6 +9,7 @@
         }
 
         error = false
+        console.log(json)
         return json["data"]
     }
 </script>
@@ -48,6 +49,8 @@
             </tbody>
         </table>
     {:else}
-        <p>No passwords exist in the database.</p>
+        <div class="h-fit w-full absolute left-0 top-1/2 -translate-y-1/2">
+            <p class="text-center font-bold">No passwords were found in the database.</p>
+        </div>
     {/if}
 {/await}

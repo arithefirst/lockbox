@@ -5,7 +5,7 @@ import isAdmin from '$lib/admin-verify'
 export async function GET({ cookies }) {
     if (await isAdmin(cookies)) {
         const db = await sql`SELECT * FROM passwords ORDER BY date ASC`
-        return json({"error": null, "data": db})
+        return json(db.length !== 0? {"error": null, "data": db}: {"error": "no data"})
     }
 
     return json({"error": "Not authorized"})
