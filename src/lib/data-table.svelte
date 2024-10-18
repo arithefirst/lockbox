@@ -17,12 +17,12 @@
     {#if !error}
         <table class="table table-zebra">
             <thead>
-            <tr class="border-primary">
-                <th class="text-center">Password</th>
-                <th class="text-center">Max Uses</th>
-                <th class="text-center">Times Used</th>
-                <th class="text-center">Uploads</th>
-            </tr>
+                <tr class="border-primary">
+                    <th class="text-center text-base-content">Password</th>
+                    <th class="text-center text-base-content">Max Uses</th>
+                    <th class="text-center text-base-content">Times Used</th>
+                    <th class="text-center text-base-content">Uploads</th>
+                </tr>
             </thead>
             <tbody>
             {#each passwords as data}
@@ -49,6 +49,16 @@
             </tbody>
         </table>
     {:else}
+        <table class="table">
+            <thead>
+            <tr class="border-primary">
+                <th class="text-center text-base-content">Password</th>
+                <th class="text-center text-base-content">Max Uses</th>
+                <th class="text-center text-base-content">Times Used</th>
+                <th class="text-center text-base-content">Uploads</th>
+            </tr>
+            </thead>
+        </table>
         <div class="h-fit w-full absolute left-0 top-1/2 -translate-y-1/2">
             <p class="text-center font-bold">No passwords were found in the database.</p>
         </div>
