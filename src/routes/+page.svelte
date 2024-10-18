@@ -6,8 +6,11 @@
         console.error("Invalid password entered.")
         wrongPassword = true;
     }
-
 </script>
+
+<head>
+    <title>Lockbox</title>
+</head>
 
 <form method="post" use:enhance enctype="multipart/form-data" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11/12 md:w-fit">
     <input required type="password" name="password" placeholder="password" class="input input-bordered mb-2 w-full md:max-w-xs" /><br>

@@ -3,6 +3,10 @@
     import {enhance} from "$app/forms";
 </script>
 
+<head>
+    <title>Lockbox Admin</title>
+</head>
+
 <div class="w-screen h-screen relative md:flex">
     <div class="w-full md:w-1/2 h-screen md:pl-6 md:py-6 md:pr-3 relative">
         <div class="w-full h-full rounded-2xl bg-base-300 overflow-x-scroll">
