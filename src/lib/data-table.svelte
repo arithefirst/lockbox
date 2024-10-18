@@ -42,6 +42,8 @@
                             </details>
                         {:else if data["uploads"] !== null && data["uploads"].length === 1}
                             {data["uploads"][0]}
+                        {:else}
+                            No Uploads Yet!
                         {/if}
                     </td>
                 </tr>
