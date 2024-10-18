@@ -1,6 +1,5 @@
 <script lang="ts">
     import DataTable from "\$lib/data-table.svelte";
-    import {page} from "$app/stores";
     import {enhance} from "$app/forms";
 </script>
 
