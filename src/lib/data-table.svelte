@@ -1,5 +1,8 @@
 <script lang="ts">
+    export let refresh: boolean = false;
     let error: boolean = false
+    let apiData = fetchData()
+
     async function fetchData() {
         const response = await fetch("/api/db")
         const json = await response.json()
@@ -9,11 +12,15 @@
         }
 
         error = false
-        console.log(json)
         return json["data"]
     }
+
+    $: if (refresh) {
+        apiData = fetchData()
+        refresh = false
+    }
 </script>
-{#await fetchData() then passwords}
+{#await apiData then passwords}
     {#if !error}
         <table class="table table-zebra">
             <thead>

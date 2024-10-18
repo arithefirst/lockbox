@@ -1,6 +1,6 @@
 import isAdmin from "$lib/admin-verify.js";
 import sql from '$lib/SQL'
-import {redirect} from "@sveltejs/kit";
+import {fail, redirect} from "@sveltejs/kit";
 
 export async function load( {cookies} ) {
     if (!await isAdmin(cookies)) {
@@ -17,9 +17,16 @@ export const actions = {
         const password = formData.password as string;
         const maxuses = formData.maxuses as string;
 
-        console.log(maxuses, +maxuses, password);
+        if (+maxuses <= 0) {
+            return fail(400, {
+                error: true,
+                message: 'Max Uses cannot be less than 1'
+            })
+        }
 
         const insert = await sql`INSERT INTO passwords (password, max_uses, times_used, date)
         VALUES (${password}, ${+maxuses}, 0, ${Math.floor(Date.now() / 1000)})`
+
+        return { success: true, message: "Success", password: password };
     },
 };
