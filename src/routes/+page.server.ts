@@ -44,7 +44,8 @@ export const actions = {
         writeFileSync(`/usr/share/lockbox/${prefix+file.name}`, Buffer.from(await file.arrayBuffer()));
 
         return {
-            success: true
+            success: true,
+            filename: file.name
         };
     }
 };
