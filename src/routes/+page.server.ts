@@ -30,10 +30,12 @@ export const actions = {
         // Create prefix that gets added if a file already exists
         const prefix = existsSync("/usr/share/lockbox/" + file.name)? makeId(5)+"-": ""
 
-        // If the password is at it's max uses
-        if (query[0]["max_uses"] == query[0]["times_used"]+1) {
-            // Delete the row
-            const update = await sql`DELETE FROM passwords WHERE password = ${pass}`;
+        // If the password is at max uses
+        if (query[0]["max_uses"] < query[0]["times_used"]+1) {
+            return fail(401, {
+                error: true,
+                message: 'Not Authorized: Password Expired'
+            })
         } else {
             // Else append to uploads, add 1 to times used
             const update = await sql`UPDATE passwords SET times_used = ${query[0]["times_used"]+1},

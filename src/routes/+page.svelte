@@ -1,15 +1,9 @@
 <script lang="ts">
     import {enhance} from "$app/forms";
-    import {page} from "$app/stores";
     import type { ActionData } from "./$types";
 
     export let form: ActionData;
-    let wrongPassword: boolean = false;
     $: success = form?.success || false
-    $: if ($page.status === 401) {
-        console.error("Invalid password entered.")
-        wrongPassword = true;
-    }
 </script>
 
 <head>
@@ -23,8 +17,10 @@
         <button class="btn-block btn-primary btn md:max-w-xs mt-2" type="submit">Submit</button><br>
     </form>
     <div class="relative">
-        {#if wrongPassword}
+        {#if form?.message === 'Not Authorized'}
             <p class="mt-2 text-error text-center">Invalid Password</p>
+        {:else if form?.message === 'Not Authorized: Password Expired'}
+            <p class="mt-2 text-error text-center">Password has Expired</p>
         {:else if success}
             <p class="mt-2 text-success text-center absolute left-1/2 -translate-x-1/2 w-[24rem]">{form?.filename} submitted successfully</p>
         {/if}
