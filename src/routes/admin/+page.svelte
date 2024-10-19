@@ -34,9 +34,9 @@
                         Create Password
                     </button>
                     {#if $page.status === 400}
-                        <p class="text-error text-center">{message}</p>
+                        <p class="mt-2 text-error text-center">{message}</p>
                     {:else if message === "Success"}
-                        <p class="text-success text-center">Successfully added password "{form?.password}"</p>
+                        <p class="mt-2 text-success text-center">Successfully added password "{form?.password}"</p>
                     {/if}
                 </form>
             </div>
