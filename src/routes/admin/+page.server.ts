@@ -1,6 +1,6 @@
 import isAdmin from "$lib/admin-verify.js";
 import sql from '$lib/SQL'
-import {fail, redirect} from "@sveltejs/kit";
+import {error, fail, redirect} from "@sveltejs/kit";
 
 export async function load( {cookies} ) {
     if (!await isAdmin(cookies)) {
@@ -17,6 +17,7 @@ export const actions = {
         const password = formData.password as string;
         const maxuses = formData.maxuses as string;
 
+        // If maxuses is 0 or negative return an error
         if (+maxuses <= 0) {
             return fail(400, {
                 error: true,
@@ -24,9 +25,24 @@ export const actions = {
             })
         }
 
-        const insert = await sql`INSERT INTO passwords (password, max_uses, times_used, date)
-        VALUES (${password}, ${+maxuses}, 0, ${Math.floor(Date.now() / 1000)})`
+        try {
+            // Try to insert the new password into the table
+            const insert = await sql`INSERT INTO passwords (password, max_uses, times_used, date)
+            VALUES (${password}, ${+maxuses}, 0, ${Math.floor(Date.now() / 1000)})`
 
-        return { success: true, message: "Success", password: password };
+            return { success: true, message: "Success", password: password };
+        }
+
+        // If the password already exists return an error
+        catch (error) {
+            if (error instanceof Error) {
+                if (error.message === "duplicate key value violates unique constraint \"passwords_pkey\"") {
+                    return fail(400, {
+                        error: true,
+                        message: `Password "${password}" already exists`
+                    })
+                }
+            }
+        }
     },
 };
