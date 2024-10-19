@@ -43,12 +43,26 @@
                                 <summary class="text-xs md:btn-sm btn btn-block btn-primary">Click to Reveal</summary>
                                 <ul class="menu dropdown-content bg-base-200 rounded-box z-[1] mt-1 w-fit p-2 shadow">
                                     {#each data["uploads"] as upload}
-                                        <li><button class="btn btn-xs my-1">{upload}</button></li>
+                                        <li>
+                                            <a
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                href={`/admin/files/${upload}`}
+                                                class="btn btn-xs my-1">
+                                                {upload}
+                                            </a>
+                                        </li>
                                     {/each}
                                 </ul>
                             </details>
                         {:else if data["uploads"] !== null && data["uploads"].length === 1}
-                            {data["uploads"][0]}
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={`/admin/files/${data["uploads"][0]}`}
+                                class="link link-hover font-bold my-1">
+                                {data["uploads"][0]}
+                            </a>
                         {:else}
                             No Uploads Yet!
                         {/if}
