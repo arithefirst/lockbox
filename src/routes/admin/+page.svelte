@@ -1,15 +1,30 @@
 <script lang="ts">
     import DataTable from "\$lib/data-table.svelte";
-    import {page} from "$app/stores"
+    import Icon from "@iconify/svelte";
+    import {page} from "$app/stores";
     import {enhance} from "$app/forms";
     import type { ActionData } from "./$types";
 
     export let form: ActionData;
     let refresh: boolean = false;
+    let userError: boolean = false
+    let userApiData = fetchData()
 
     $: message = form?.message || '';
     $: if (message === "Success") {
         refresh = true;
+    }
+
+    async function fetchData() {
+        const response = await fetch("/api/users")
+        const json = await response.json()
+        if (json["error"] !== null) {
+            userError = true
+            return null
+        }
+
+        userError = false
+        return json["data"]
     }
 </script>
 
@@ -31,11 +46,11 @@
                     <input required name="password" class="input w-full" placeholder="Password">
                     <input required name="maxuses" class="input w-full mt-2" placeholder="Max Uses" type="number" />
                     <button type="submit" class="w-full btn btn-primary mt-2">
-                        Create Password
+                        Add Password
                     </button>
-                    {#if $page.status === 400}
+                    {#if $page.status === 400 && form?.form === "newPassword"}
                         <p class="mt-2 text-error text-center">{message}</p>
-                    {:else if message === "Success"}
+                    {:else if message === "Success" && form?.form === "newPassword"}
                         <p class="mt-2 text-success text-center">Successfully added password "{form?.password}"</p>
                     {/if}
                 </form>
@@ -47,13 +62,49 @@
             </div>
         </div>
         <!-- Bottom-Left -->
-        <div class="w-full md:col-span-4 md:px-3 md:pt-3 md:pb-6 relative">
+        <div class="w-full md:col-span-3 md:px-3 md:pt-3 md:pb-6">
             <div class="w-full h-full rounded-2xl bg-base-300 overflow-x-scroll">
+                <div class="rounded-2xl flex justify-center items-center bg-base-300 h-full w-full">
+                    <form class="w-11/12" use:enhance method="POST" action="?/addUser">
+                        <input required name="username" class="input w-full" placeholder="Username">
+                        <input required name="password" class="input w-full mt-2" placeholder="Password" type="password" />
+                        <button type="submit" class="w-full btn btn-primary mt-2">
+                            Add Admin
+                        </button>
+                        {#if $page.status === 400 && form?.form === "newUser"}
+                            <p class="mt-2 text-error text-center">{message}</p>
+                        {:else if message === "Success" && form?.form === "newUser"}
+                            <p class="mt-2 text-success text-center">Successfully added user "{form?.user}"</p>
+                        {/if}
+                    </form>
+                </div>
             </div>
         </div>
         <!-- Bottom-Right -->
-        <div class="w-full md:col-span-4 md:pl-3 md:pr-6 md:pt-3 md:pb-6 relative">
+        <div class="w-full md:col-span-5 md:pl-3 md:pr-6 md:pt-3 md:pb-6 relative">
             <div class="w-full h-full rounded-2xl bg-base-300 overflow-x-scroll">
+                {#await userApiData then users}
+                    {#if !userError}
+                        <table class="table table-zebra">
+                            <thead>
+                                <tr class="border-primary">
+                                    <th class="text-center text-base-content">Username</th>
+                                    <th class="text-center text-base-content">Edit</th>
+                                    <th class="text-center text-base-content">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {#each users as username}
+                                    <tr>
+                                        <td class="text-center">{username}</td>
+                                        <td><Icon icon="mingcute:user-edit-fill" height="18px" class="text-white cursor-pointer mx-auto"></Icon></td>
+                                        <td><Icon icon="mingcute:delete-2-fill" height="18px" class="text-error cursor-pointer mx-auto"></Icon></td>
+                                    </tr>
+                                {/each}
+                            </tbody>
+                        </table>
+                    {/if}
+                {/await}
             </div>
         </div>
     </div>

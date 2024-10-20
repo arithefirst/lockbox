@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS admin_keys (
 );
 
 CREATE TABLE IF NOT EXISTS admin_logins (
-                       username text unique,
+                       username text PRIMARY KEY UNIQUE,
                        salt text,
                        hash text
 );

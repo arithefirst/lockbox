@@ -1,6 +1,8 @@
+import makeId from "$lib/makeid";
+import { createHash } from 'node:crypto';
+import { error, fail, redirect } from "@sveltejs/kit";
+import sql from '$lib/SQL';
 import isAdmin from "$lib/admin-verify.js";
-import sql from '$lib/SQL'
-import {error, fail, redirect} from "@sveltejs/kit";
 
 export async function load( {cookies} ) {
     if (!await isAdmin(cookies)) {
@@ -30,7 +32,7 @@ export const actions = {
             const insert = await sql`INSERT INTO passwords (password, max_uses, times_used, date)
             VALUES (${password}, ${+maxuses}, 0, ${Math.floor(Date.now() / 1000)})`
 
-            return { success: true, message: "Success", password: password };
+            return { success: true, message: "Success", password: password, form: "newPassword" };
         }
 
         // If the password already exists return an error
@@ -39,10 +41,38 @@ export const actions = {
                 if (error.message === "duplicate key value violates unique constraint \"passwords_pkey\"") {
                     return fail(400, {
                         error: true,
-                        message: `Password "${password}" already exists`
+                        message: `Password "${password}" already exists`,
+                        form: "newPassword"
                     })
                 }
             }
         }
     },
+    addUser: async ({request}) => {
+        const formData = Object.fromEntries(await request.formData());
+
+        const username = formData.username as string;
+        const password = formData.password as string;
+        const salt = makeId(16)
+        try {
+            // Try to insert the new password into the table
+            const insert = await sql`INSERT INTO admin_logins (username, salt, hash)
+            VALUES (${username}, ${salt}, ${createHash('sha256').update(salt + password).digest('hex')})`
+
+            return { success: true, message: "Success", user: username, form: "newUser"};
+        }
+
+        // If the password already exists return an error
+        catch (error) {
+            if (error instanceof Error) {
+                if (error.message === "duplicate key value violates unique constraint \"admin_logins_pkey\"") {
+                    return fail(400, {
+                        error: true,
+                        message: `User "${username}" already exists`,
+                        form: "newUser"
+                    })
+                }
+            }
+        }
+    }
 };
