@@ -4,11 +4,12 @@ CREATE TABLE IF NOT EXISTS passwords (
                        times_used int,
                        access_ips text[],
                        uploads text[],
-                       date int
+                       date bigint
 );
 
 CREATE TABLE IF NOT EXISTS admin_keys (
                        key text PRIMARY KEY UNIQUE,
+                       username text,
                        expires bigint
 );
 

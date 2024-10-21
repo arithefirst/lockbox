@@ -74,5 +74,11 @@ export const actions = {
                 }
             }
         }
+    },
+    logout: async ({cookies}) => {
+        const removeToken = await sql`DELETE FROM admin_keys`
+
+        cookies.delete('adminSessionToken', {path: '/'});
+        redirect(307, "/admin/login")
     }
 };

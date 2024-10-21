@@ -43,8 +43,8 @@ export const actions = {
         let token = makeId(32)
 
         // Save token in DB
-        const insert = await sql`INSERT INTO admin_keys (key, expires)
-        VALUES (${token}, ${expiry})`
+        const insert = await sql`INSERT INTO admin_keys (key, expires, username)
+        VALUES (${token}, ${expiry}, ${username})`
 
         // Add cookie to browser
         cookies.set("adminSessionToken", token, {path: "/"})
