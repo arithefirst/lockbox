@@ -70,6 +70,8 @@
                     </tr>
                 {/each}
             </tbody>
+        {:else}
+            <p class="w-full h-full text-center absolute font-bold mt-5">No passwords yet!</p>
         {/if}
     {/await}
 </table>
