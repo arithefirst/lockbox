@@ -83,16 +83,16 @@
         <!-- Bottom-Right -->
         <div class="w-full md:col-span-5 md:pl-3 md:pr-6 md:pt-3 md:pb-6 relative">
             <div class="w-full h-full rounded-2xl bg-base-300 overflow-x-scroll">
-                {#await userApiData then users}
-                    {#if !userError}
-                        <table class="table table-zebra">
-                            <thead>
-                                <tr class="border-primary">
-                                    <th class="text-center text-base-content">Username</th>
-                                    <th class="text-center text-base-content">Edit</th>
-                                    <th class="text-center text-base-content">Delete</th>
-                                </tr>
-                            </thead>
+                <table class="table table-zebra">
+                    <thead>
+                        <tr class="border-primary">
+                            <th class="text-center text-base-content">Username</th>
+                            <th class="text-center text-base-content">Edit</th>
+                            <th class="text-center text-base-content">Delete</th>
+                        </tr>
+                    </thead>
+                    {#await userApiData then users}
+                        {#if !userError}
                             <tbody>
                                 {#each users as username}
                                     <tr>
@@ -102,9 +102,9 @@
                                     </tr>
                                 {/each}
                             </tbody>
-                        </table>
-                    {/if}
-                {/await}
+                        {/if}
+                    {/await}
+                </table>
             </div>
         </div>
     </div>
