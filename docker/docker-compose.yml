@@ -1,7 +1,7 @@
 services:
   app:
     container_name: lockbox
-    image: lockbox:latest
+    image: arithefirst/lockbox:latest
     network_mode: host
     restart: always
     depends_on:
