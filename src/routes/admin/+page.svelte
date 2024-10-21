@@ -32,10 +32,6 @@
         return json["username"]
     }
 
-    function logout() {
-
-    }
-
     // Reactive Blocks
     $: message = form?.message || '';
     $: if (message === "Success") {
