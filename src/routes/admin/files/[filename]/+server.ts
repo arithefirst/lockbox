@@ -12,7 +12,7 @@ export async function GET({cookies, params}) {
 
         catch (e) {
             if (e instanceof Error) {
-                if (e.message === "File size (4000000000) is greater than 2 GiB") {
+                if (e.message.includes("greater than 2 GiB")) {
                     const fileStream = createReadStream("/usr/share/lockbox/" + params.filename);
                     // @ts-ignore
                     return new Response(fileStream, {
