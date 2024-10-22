@@ -43,19 +43,19 @@
     <title>Lockbox</title>
 </head>
 
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-    <form class="w-11/12 md:w-fit">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-center">
+    <form class="mx-auto w-11/12 md:w-fit">
         <input bind:value={password} required type="password" name="password" placeholder="Password" class="input input-bordered mb-2 w-full md:max-w-xs" /><br>
         <input bind:this={input} multiple={false} required type="file" name="file" class="file-input file-input-bordered w-full md:max-w-xs"/><br>
         <button class="btn-block btn-primary btn md:max-w-xs mt-2" type="submit" on:click={submit}>Submit</button><br>
     </form>
     <div class="relative">
         {#if uploading === true}
-            <p class="text-warning mt-2 text-center">Uploading File. Please do not close page.</p>
+            <p class="text-warning mt-2 text-center w-full">Uploading File. Please do not close page.</p>
         {:else if uploading === false}
-            <p class="text-success mt-2 text-center">{response} successfully uploaded.</p>
+            <p class="text-success mt-2 text-center w-full">{response} successfully uploaded.</p>
         {:else if error != null}
-            <p class="text-error mt-2 text-center">Error: {error["message"]}</p>
+            <p class="text-error mt-2 text-center w-full">Error: {error["message"]}</p>
         {/if}
     </div>
 </div>
