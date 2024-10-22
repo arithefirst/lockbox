@@ -4,6 +4,9 @@ services:
     image: arithefirst/lockbox:latest
     network_mode: host
     restart: always
+    environment:
+      ORIGIN: http://localhost:3000 # Your URL Goes Here (Default is localhost:3000)
+      BODY_SIZE_LIMIT: Infinity
     depends_on:
       - db
     volumes:
