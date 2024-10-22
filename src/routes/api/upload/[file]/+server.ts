@@ -1,4 +1,4 @@
-import {error, json} from '@sveltejs/kit';
+import {error, json, type RequestHandler} from '@sveltejs/kit';
 import makeId from "$lib/makeid";
 import sql from '$lib/SQL'
 import fs from "node:fs";
@@ -46,28 +46,33 @@ export const POST = (async ({ params, request, url }) => {
         close() {
             diskStream.end();
         },
-        abort() {
+        abort(err) {
             diskStream.end();
             // Delete unfinished file
             fs.rmSync(`/usr/share/lockbox/${prefix+filename}`, {
                 force: true,
             });
 
-            return error(500, "Process Aborted")
+            return err
         },
     });
 
+    let errormsg: any
     // Promisify and wait for stream to finish
     const success = await new Promise<boolean>((resolve) =>
         stream
             .pipeTo(writeableStream) // Pipe it!
             .then(() => resolve(true))
-            .catch(() => resolve(false))
+            .catch((err) => {
+                errormsg = err
+                console.error(`Error during piping: ${err}`);
+                resolve(false)
+            })
     );
 
     if (!success) {
-        return error(500)
+        return error(500, {message: errormsg});
     } else {
         return json({filename: prefix+filename});
     }
-})
+}) satisfies RequestHandler;
