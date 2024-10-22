@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises'
+import {createReadStream} from "node:fs";
 import isAdmin from "$lib/admin-verify";
 import { error } from '@sveltejs/kit'
 
@@ -9,8 +10,25 @@ export async function GET({cookies, params}) {
             return new Response(file)
         }
 
-        catch {
-            return error(404, {message: `${params.filename} not found`})
+        catch (e) {
+            if (e instanceof Error) {
+                if (e.message === "File size (4000000000) is greater than 2 GiB") {
+                    const fileStream = createReadStream("/usr/share/lockbox/" + params.filename);
+                    // @ts-ignore
+                    return new Response(fileStream, {
+                        status: 200,
+                        headers: {
+                            'Content-Type': 'application/octet-stream',
+                            'Accept-Ranges': 'bytes',
+                            'Cache-Control': 'public, max-age=31536000'
+                        },
+                    })
+                } else {
+                    return error(404, {message: e.message})
+                }
+            } else {
+                return error(400)
+            }
         }
     }
     return error(401, {message: 'Not Authorized'})

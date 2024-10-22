@@ -1,9 +1,42 @@
 <script lang="ts">
-    import {enhance} from "$app/forms";
-    import type { ActionData } from "./$types";
+    let input: HTMLInputElement
+    let password: string
+    let response: string
+    let uploading: boolean | null = null
 
-    export let form: ActionData;
-    $: success = form?.success || false
+    interface postError {message: string}
+    let error: postError | null = null
+
+    async function uploadFile(file: File) {
+        // If the file has no mimetype, treat it like a binary
+        if (file.type === "") {
+            file = new File([file], file.name, {type: "application/octet-stream"})
+        }
+
+        uploading = true
+        const res = await fetch(`/api/upload/${file.name}?pw=${password}`, {
+            method: 'POST',
+            body: file
+        });
+
+        if (res.ok) {
+           await res.json().then((json) => {
+                response = json["filename"]
+                uploading = false
+            })
+        } else {
+            uploading = null
+            error = await res.json()
+            console.log(error)
+        }
+    }
+
+    function submit() {
+        if (!input.files || input.files.length === 0) return;
+        uploadFile(input.files[0]);
+    }
+
+
 </script>
 
 <head>
@@ -11,18 +44,18 @@
 </head>
 
 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-    <form method="post" use:enhance enctype="multipart/form-data" class="w-11/12 md:w-fit">
-        <input required type="password" name="password" placeholder="Password" class="input input-bordered mb-2 w-full md:max-w-xs" /><br>
-        <input required type="file" name="file" class="file-input file-input-bordered w-full md:max-w-xs"/><br>
-        <button class="btn-block btn-primary btn md:max-w-xs mt-2" type="submit">Submit</button><br>
+    <form class="w-11/12 md:w-fit">
+        <input bind:value={password} required type="password" name="password" placeholder="Password" class="input input-bordered mb-2 w-full md:max-w-xs" /><br>
+        <input bind:this={input} multiple={false} required type="file" name="file" class="file-input file-input-bordered w-full md:max-w-xs"/><br>
+        <button class="btn-block btn-primary btn md:max-w-xs mt-2" type="submit" on:click={submit}>Submit</button><br>
     </form>
     <div class="relative">
-        {#if form?.message === 'Not Authorized'}
-            <p class="mt-2 text-error text-center">Invalid Password</p>
-        {:else if form?.message === 'Not Authorized: Password Expired'}
-            <p class="mt-2 text-error text-center">Password has Expired</p>
-        {:else if success}
-            <p class="mt-2 text-success text-center absolute left-1/2 -translate-x-1/2 w-[24rem]">{form?.filename} submitted successfully</p>
+        {#if uploading === true}
+            <p class="text-warning mt-2 text-center">Uploading File. Please do not close page.</p>
+        {:else if uploading === false}
+            <p class="text-success mt-2 text-center">{response} successfully uploaded.</p>
+        {:else if error != null}
+            <p class="text-error mt-2 text-center">Error: {error["message"]}</p>
         {/if}
     </div>
 </div>
