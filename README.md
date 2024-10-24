@@ -4,7 +4,9 @@ A password protected dropbox where users given a password can upload a file. Com
 
 ## Installation
 
-1) Download [`docker-compose.yml`](https://github.com/arithefirst/lockbox/blob/master/docker/docker-compose.yml) and [`init.sql`](https://github.com/arithefirst/lockbox/blob/master/docker/init.sql) from `/docker/`
+**1. Downloads**
+
+First, download [`docker-compose.yml`](https://github.com/arithefirst/lockbox/blob/master/docker/docker-compose.yml) and [`init.sql`](https://github.com/arithefirst/lockbox/blob/master/docker/init.sql) from `/docker/`. This can be done with the below comamand.
 
 ```shell
 wget https://raw.githubusercontent.com/arithefirst/lockbox/refs/heads/master/docker/docker-compose.yml && \
@@ -13,11 +15,11 @@ wget https://raw.githubusercontent.com/arithefirst/lockbox/refs/heads/master/doc
 > [!IMPORTANT]  
 > [`init.sql`](https://github.com/arithefirst/lockbox/blob/master/docker/init.sql) is **required** for the application to work properly. It sets up the relations and inital admin credentials in PostgreSQL
 
-2) Start the Docker Compose stack
-   
-Run `docker-compose up -d` to start the stack. This will pull arithefirst/lockbox:latest and postgres:latest from Dockerhub and run them locally.
+**2. Start the Docker Compose stack**
 
-3) Accessing the server
+Use vim or your favorite text editor to edit `docker-compose.yml`. Look for the line with the comment `# Your URL Goes Here (Default is localhost:3000)` and replace `http://localhost:3000` with the URI to where your server will be accessible. Then, run `docker-compose up -d` to start the stack. This will pull arithefirst/lockbox:latest and postgres:latest from Dockerhub and run them locally.
+
+**3. Accessing the server**
 
 Now that the Docker Compose stack is running, you can access the server from your browser at `http://IP_ADDR:3000`, where `IP_ADDR` is the IP of the server that you are running the stack on.
 
