@@ -21,7 +21,7 @@ Use vim or your favorite text editor to edit `docker-compose.yml`. Look for the 
 
 **3. Accessing the server**
 
-Now that the Docker Compose stack is running, you can access the server from your browser at `http://IP_ADDR:3000`, where `IP_ADDR` is the IP of the server that you are running the stack on.
+Now that the Docker Compose stack is running, you can access the server from your browser at `http://IP_ADDR`, where `IP_ADDR` is the URI of the server that you are running the stack on (This should be the same URI that you set in Step 2).
 
 
 ## Usage
