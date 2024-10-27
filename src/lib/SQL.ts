@@ -1,11 +1,11 @@
-import postgres from 'postgres'
+import postgres from "postgres";
 
 const sql = postgres({
-    host: 'localhost',
-    username: 'postgres',
-    password: 'postgres',
-    database: 'lockbox',
-    debug: true,
-})
+  host: "localhost",
+  username: "postgres",
+  password: "postgres",
+  database: "lockbox",
+  debug: true,
+});
 
-export default sql
+export default sql;
