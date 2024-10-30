@@ -43,8 +43,8 @@
   <title>Lockbox</title>
 </head>
 
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-center">
-  <form class="mx-auto w-11/12 md:w-fit">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 w-11/12 md:w-fit -translate-y-1/2 flex-col justify-center">
+  <form class="mx-auto">
     <input
       bind:value={password}
       required
