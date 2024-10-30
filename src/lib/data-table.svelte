@@ -1,7 +1,12 @@
 <script lang="ts">
+  import Icon from "@iconify/svelte";
+  import { enhance } from "$app/forms";
+
   export let refresh: boolean = false;
   let error: boolean = false;
   let apiData = fetchData();
+
+  let passwordToRemove: string
 
   async function fetchData() {
     const response = await fetch("/api/db");
@@ -15,11 +20,27 @@
     return json["data"];
   }
 
+  function openModal(password: string) {
+    passwordToRemove = password;
+    modal.showModal()
+  }
   $: if (refresh) {
     apiData = fetchData();
     refresh = false;
   }
 </script>
+
+<dialog id="modal" class="modal modal-bottom sm:modal-middle text-center">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">
+      Are you sure you want to delete {passwordToRemove} and its associated files?
+    </h3>
+    <form use:enhance method="POST" action="?/deletePassword">
+      <input id="password" name="password" class="hidden" value={passwordToRemove} />
+      <button class="mt-2 btn btn-error" on:click={() => modal.close()}>Delete Password</button>
+    </form>
+  </div>
+</dialog>
 
 <table class="table table-zebra">
   <thead>
@@ -28,6 +49,7 @@
       <th class="text-center text-base-content">Max Uses</th>
       <th class="text-center text-base-content">Times Used</th>
       <th class="text-center text-base-content">Uploads</th>
+      <th class="text-center w-5"></th>
     </tr>
   </thead>
   {#await apiData then passwords}
@@ -59,6 +81,11 @@
               {:else}
                 No Uploads Yet!
               {/if}
+            </td>
+            <td class="text-center">
+              <button on:click={() => openModal(data["password"])}>
+                <Icon icon="mingcute:delete-2-fill" height="18px" class="text-error" />
+              </button>
             </td>
           </tr>
         {/each}

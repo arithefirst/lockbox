@@ -1,9 +1,10 @@
 import makeId from "$lib/makeid";
 import { createHash } from "node:crypto";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import sql from "$lib/SQL";
 import isAdmin from "$lib/admin-verify.js";
 import userLogin from "$lib/userauth";
+import fs from "node:fs";
 
 export async function load({ cookies }) {
   if (!(await isAdmin(cookies))) {
@@ -134,4 +135,18 @@ export const actions = {
     const deleteUser = await sql`DELETE FROM admin_logins WHERE username = ${username}`;
     return { success: true, user: username, form: "delete" };
   },
+  deletePassword: async ({ request }) => {
+    const formData = Object.fromEntries(await request.formData());
+    const password = formData.password as string;
+
+    const fileRequest = await sql`SELECT uploads FROM passwords WHERE password = ${password} LIMIT 1`;
+    const files = fileRequest[0]["uploads"]
+
+    for (const file of files) {
+      fs.rmSync("/usr/share/lockbox/" + file, {force: true,});
+    }
+
+    const delPassword = await sql`DELETE FROM passwords WHERE password = ${password}`
+    return { success: true };
+  }
 };
