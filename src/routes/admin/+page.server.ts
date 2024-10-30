@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { error, fail, redirect } from "@sveltejs/kit";
 import sql from "$lib/SQL";
 import isAdmin from "$lib/admin-verify.js";
+import userLogin from "$lib/userauth";
 
 export async function load({ cookies }) {
   if (!(await isAdmin(cookies))) {
@@ -55,9 +56,9 @@ export const actions = {
     try {
       // Try to insert the new password into the table
       const insert = await sql`INSERT INTO admin_logins (username, salt, hash)
-            VALUES (${username}, ${salt}, ${createHash("sha256")
-              .update(salt + password)
-              .digest("hex")})`;
+      VALUES (${username}, ${salt}, ${createHash("sha256")
+        .update(salt + password)
+        .digest("hex")})`;
 
       return { success: true, message: "Success", user: username, form: "newUser" };
     } catch (error) {
@@ -81,14 +82,56 @@ export const actions = {
   },
   edit: async ({ request }) => {
     const formData = Object.fromEntries(await request.formData());
-    const username = formData.username as string;
 
-    return { success: true, user: username, form: "edit" };
+    // Current Creds
+    const password = formData.currentPassword as string;
+    const username = formData.currentUsername as string;
+
+    // Updated Creds
+    const newUsername = formData.newUsername as string;
+    const newPassword = formData.newPassword as string;
+
+    if (!(await userLogin(username, password))) {
+      console.log("Wrong password");
+      return fail(401, {
+        error: true,
+        form: "edit",
+        success: false,
+        user: username,
+        message: "Invalid username or password",
+      });
+    }
+
+    // Evaluate the inputs and update the database
+    if (newUsername !== "" && newPassword == "") {
+      const updateUser = await sql`UPDATE admin_logins SET username = ${newUsername} WHERE username = ${username}`;
+      return { success: true, user: username, form: "edit" };
+    } else if (newPassword !== "" && newUsername == "") {
+      const salt = makeId(16);
+      const updateUser = await sql`UPDATE admin_logins SET salt = ${salt}, hash = ${createHash("sha256")
+        .update(salt + newPassword)
+        .digest("hex")} WHERE username = ${username}`;
+      return { success: true, user: username, form: "edit" };
+    } else if (newPassword !== "" && newPassword !== "") {
+      const salt = makeId(16);
+      const updateUser = await sql`UPDATE admin_logins SET salt = ${salt}, hash = ${createHash("sha256")
+        .update(salt + newPassword)
+        .digest("hex")}, username = ${newUsername} WHERE username = ${username}`;
+      return { success: true, user: username, form: "edit" };
+    } else {
+      return fail(400, {
+        error: true,
+        form: "edit",
+        success: false,
+        user: username,
+        message: "1+ Fields must be filled.",
+      });
+    }
   },
   delete: async ({ request }) => {
     const formData = Object.fromEntries(await request.formData());
     const username = formData.username as string;
-
+    const deleteUser = await sql`DELETE FROM admin_logins WHERE username = ${username}`;
     return { success: true, user: username, form: "delete" };
   },
 };

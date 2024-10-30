@@ -12,6 +12,7 @@
     username: string;
     type: string;
     fail: boolean;
+    message?: string;
   }
 
   // Variables
@@ -69,6 +70,7 @@
       type: form?.form,
       username: form?.user!,
       fail: !form?.success!,
+      message: form?.message!,
     });
 
     // Reassign variable to make the #each statement reactive
@@ -162,7 +164,7 @@
                           <h3 class="text-lg font-bold">Edit {username}</h3>
                           <div class="modal-action">
                             <form use:enhance method="POST" action="?/edit" class="grid grid-cols-1 mx-auto">
-                              <input id="edit_{username}_input" name="username" class="hidden" value={username} />
+                              <input id="edit_{username}_input" name="currentUsername" class="hidden" value={username} />
                               <input name="newUsername" type="text" placeholder="New Username" class="input input-bordered" />
                               <input name="newPassword" type="password" placeholder="New Password" class="input mt-2 input-bordered" />
                               <input

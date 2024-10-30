@@ -4,6 +4,7 @@
     username: string;
     type: string;
     fail: boolean;
+    message?: string;
   }
 
   export let alert: Alert;
@@ -13,7 +14,10 @@
 {#if alert.type === "delete"}
   {#if alert.fail === true}
     <div role="alert" class="alert alert-error relative my-2" bind:this={self}>
-      <p class="text-error-content">Failed to delete {alert.username}</p>
+      <p class="text-error-content">
+        Failed to delete {alert.username}
+        {#if alert.message !== ""}({alert.message}){/if}
+      </p>
       <button class="absolute right-2 top-1/2 -translate-y-1/2" on:click={() => self.remove()}>
         <Icon icon="mingcute:close-line" class="text-error-content" height="28" />
       </button>
@@ -29,7 +33,10 @@
 {:else if alert.type === "edit"}
   {#if alert.fail === true}
     <div role="alert" class="alert alert-error relative my-2" bind:this={self}>
-      <p class="text-error-content">Failed to update {alert.username}</p>
+      <p class="text-error-content">
+        Failed to update {alert.username}
+        {#if alert.message !== ""}({alert.message}){/if}
+      </p>
       <button class="absolute right-2 top-1/2 -translate-y-1/2" on:click={() => self.remove()}>
         <Icon icon="mingcute:close-line" class="text-error-content" height="28" />
       </button>
