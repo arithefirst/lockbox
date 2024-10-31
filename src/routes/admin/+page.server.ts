@@ -139,14 +139,26 @@ export const actions = {
     const formData = Object.fromEntries(await request.formData());
     const password = formData.password as string;
 
-    const fileRequest = await sql`SELECT uploads FROM passwords WHERE password = ${password} LIMIT 1`;
-    const files = fileRequest[0]["uploads"]
+    try {
+      const fileRequest = await sql`SELECT uploads FROM passwords WHERE password = ${password} LIMIT 1`;
+      const files = fileRequest[0]["uploads"]
 
-    for (const file of files) {
-      fs.rmSync("/usr/share/lockbox/" + file, {force: true,});
+      if (files !== null) {
+        for (const file of files) {
+          fs.rmSync("/usr/share/lockbox/" + file, {force: true,});
+        }
+      }
+
+      const delPassword = await sql`DELETE FROM passwords WHERE password = ${password}`
     }
 
-    const delPassword = await sql`DELETE FROM passwords WHERE password = ${password}`
+    catch(e) {
+      return fail(500, {
+        success: false,
+        message: "Something went wrong server side"
+      })
+    }
+
     return { success: true };
   }
 };

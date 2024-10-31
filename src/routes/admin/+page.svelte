@@ -17,7 +17,6 @@
 
   // Variables
   export let form: ActionData;
-  let refresh: boolean = false;
   let userError: boolean = false;
   let username = fetchUsername();
   let userApiData = fetchUsers();
@@ -61,9 +60,6 @@
 
   // Reactive Blocks
   $: message = form?.message || "";
-  $: if (message === "Success") {
-    refresh = true;
-  }
 
   $: if (form?.form === "delete" || form?.form === "edit") {
     alerts.push({
@@ -85,7 +81,7 @@
 <div class="w-screen h-screen relative md:flex">
   <div class="w-full md:w-1/2 h-screen md:pl-6 md:py-6 md:pr-3 relative">
     <div class="w-full h-full rounded-2xl bg-base-300 overflow-x-scroll">
-      <DataTable bind:refresh />
+      <DataTable {form} />
     </div>
   </div>
   <div class="md:grid h-full grid-rows-2 md:grid-cols-8 md:w-1/2 w-full">

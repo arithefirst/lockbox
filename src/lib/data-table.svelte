@@ -1,8 +1,10 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
   import { enhance } from "$app/forms";
+  import type { ActionData } from "../routes/admin/$types"
 
-  export let refresh: boolean = false;
+  export let form: ActionData;
+  let refresh: boolean = false;
   let error: boolean = false;
   let apiData = fetchData();
 
@@ -24,6 +26,11 @@
     passwordToRemove = password;
     modal.showModal()
   }
+
+  $: if (form?.success) {
+    refresh = true
+  }
+
   $: if (refresh) {
     apiData = fetchData();
     refresh = false;
