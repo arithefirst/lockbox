@@ -16,7 +16,7 @@
     }
 
     uploading = true;
-    const res = await fetch(`/api/upload/${file.name}?pw=${password}`, {
+    const res = await fetch(`/api/upload/${file.name}?pw=${encodeURIComponent(password)}`, {
       method: "POST",
       body: file,
     });
