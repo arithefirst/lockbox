@@ -27,7 +27,7 @@ export const actions = {
 
     // Create the session token
     let expiry = Math.floor(Date.now() / 1000) + 30 * 86400; // 30 * 86400 is 30 days
-    let token = makeId(32);
+    let token = makeId();
 
     // Save token in DB
     const insert = await sql`INSERT INTO admin_keys (key, expires, username)

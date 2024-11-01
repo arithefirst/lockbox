@@ -16,7 +16,7 @@ export const POST = (async ({ params, request, url }) => {
   // Create prefix that gets added if a file already exists
   const filename = params.file;
   const stream = request.body;
-  const prefix = fs.existsSync("/usr/share/lockbox/" + filename) ? makeId(5) + "-" : "";
+  let prefix = fs.existsSync("/usr/share/lockbox/" + filename) ? makeId() + "-" : "";
 
   // Data validation
   if (!filename) return error(400, "No path received");

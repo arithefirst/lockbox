@@ -53,7 +53,7 @@ export const actions = {
 
     const username = formData.username as string;
     const password = formData.password as string;
-    const salt = makeId(16);
+    const salt = makeId();
     try {
       // Try to insert the new password into the table
       const insert = await sql`INSERT INTO admin_logins (username, salt, hash)
@@ -108,13 +108,13 @@ export const actions = {
       const updateUser = await sql`UPDATE admin_logins SET username = ${newUsername} WHERE username = ${username}`;
       return { success: true, user: username, form: "edit" };
     } else if (newPassword !== "" && newUsername == "") {
-      const salt = makeId(16);
+      const salt = makeId();
       const updateUser = await sql`UPDATE admin_logins SET salt = ${salt}, hash = ${createHash("sha256")
         .update(salt + newPassword)
         .digest("hex")} WHERE username = ${username}`;
       return { success: true, user: username, form: "edit" };
     } else if (newPassword !== "" && newPassword !== "") {
-      const salt = makeId(16);
+      const salt = makeId();
       const updateUser = await sql`UPDATE admin_logins SET salt = ${salt}, hash = ${createHash("sha256")
         .update(salt + newPassword)
         .digest("hex")}, username = ${newUsername} WHERE username = ${username}`;
@@ -141,24 +141,22 @@ export const actions = {
 
     try {
       const fileRequest = await sql`SELECT uploads FROM passwords WHERE password = ${password} LIMIT 1`;
-      const files = fileRequest[0]["uploads"]
+      const files = fileRequest[0]["uploads"];
 
       if (files !== null) {
         for (const file of files) {
-          fs.rmSync("/usr/share/lockbox/" + file, {force: true,});
+          fs.rmSync("/usr/share/lockbox/" + file, { force: true });
         }
       }
 
-      const delPassword = await sql`DELETE FROM passwords WHERE password = ${password}`
-    }
-
-    catch(e) {
+      const delPassword = await sql`DELETE FROM passwords WHERE password = ${password}`;
+    } catch (e) {
       return fail(500, {
         success: false,
-        message: "Something went wrong server side"
-      })
+        message: "Something went wrong server side",
+      });
     }
 
     return { success: true };
-  }
+  },
 };

@@ -27,6 +27,7 @@
     "@iconify/svelte": "^4.0.2",
     "@types/node": "^22.7.5",
     "postgres": "^3.4.4",
-    "prettier-plugin-svelte": "^3.2.7"
+    "prettier-plugin-svelte": "^3.2.7",
+    "short-uuid": "^5.2.0"
   }
 }
