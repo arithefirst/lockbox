@@ -18,11 +18,14 @@ wget https://raw.githubusercontent.com/arithefirst/lockbox/refs/heads/master/doc
 
 **2. Start the Docker Compose stack**
 
-Use vim or your favorite text editor to edit `docker-compose.yml`. Look for the line with the comment `# Your URL Goes Here (Default is localhost:3000)` and replace `http://localhost:3000` with the URI to where your server will be accessible. Then, run `docker-compose up -d` to start the stack. This will pull arithefirst/lockbox:latest and postgres:latest from Dockerhub and run them locally.
+Use vim or your favorite text editor to edit `docker-compose.yml`. Look for the line with the comment `# Your URL Goes Here (Default is localhost:3000)` and replace `http://localhost:3000` with the URI of your server. Then, run `docker-compose up -d` to start the stack. This will pull arithefirst/lockbox:latest and postgres:latest from Dockerhub and run them locally.
 
 **3. Accessing the server**
 
 Now that the Docker Compose stack is running, you can access the server from your browser at `http://IP_ADDR`, where `IP_ADDR` is the URI of the server that you are running the stack on (This should be the same URI that you set in Step 2).
+
+> [!IMPORTANT]
+> If you are not accessing the site at localhost, you must have a valid SSL certificate setup, as the site cookies are set to secure mode and you will not be able to log into the admin dashboard without them.
 
 ## Usage
 
