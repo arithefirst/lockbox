@@ -1,9 +1,13 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
-  let wrongPassword: boolean = false;
+  let wrongPassword: boolean = $state(false);
 
-  $: wrongPassword = $page.status === 401;
+  run(() => {
+    wrongPassword = $page.status === 401;
+  });
 </script>
 
 <head>

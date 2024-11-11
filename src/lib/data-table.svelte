@@ -1,14 +1,20 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Icon from "@iconify/svelte";
   import { enhance } from "$app/forms";
   import type { ActionData } from "../routes/admin/$types";
 
-  export let form: ActionData;
-  let refresh: boolean = false;
-  let error: boolean = false;
-  let apiData = fetchData();
+  interface Props {
+    form: ActionData;
+  }
 
-  let passwordToRemove: string;
+  let { form }: Props = $props();
+  let refresh: boolean = $state(false);
+  let error: boolean = $state(false);
+  let apiData = $state(fetchData());
+
+  let passwordToRemove: string = $state();
 
   async function fetchData() {
     const response = await fetch("/api/db");
@@ -27,14 +33,18 @@
     modal.showModal();
   }
 
-  $: if (form?.success) {
-    refresh = true;
-  }
+  run(() => {
+    if (form?.success) {
+      refresh = true;
+    }
+  });
 
-  $: if (refresh) {
-    apiData = fetchData();
-    refresh = false;
-  }
+  run(() => {
+    if (refresh) {
+      apiData = fetchData();
+      refresh = false;
+    }
+  });
 </script>
 
 <dialog id="modal" class="modal modal-bottom sm:modal-middle text-center">
@@ -44,7 +54,7 @@
     </h3>
     <form use:enhance method="POST" action="?/deletePassword">
       <input id="password" name="password" class="hidden" value={passwordToRemove} />
-      <button class="mt-2 btn btn-error" on:click={() => modal.close()}>Delete Password</button>
+      <button class="mt-2 btn btn-error" onclick={() => modal.close()}>Delete Password</button>
     </form>
   </div>
 </dialog>
@@ -90,7 +100,7 @@
               {/if}
             </td>
             <td class="text-center">
-              <button on:click={() => openModal(data["password"])}>
+              <button onclick={() => openModal(data["password"])}>
                 <Icon icon="mingcute:delete-2-fill" height="18px" class="text-error" />
               </button>
             </td>

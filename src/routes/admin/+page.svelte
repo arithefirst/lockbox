@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   // Imports
   import DataTable from "$lib/data-table.svelte";
   import Alert from "$lib/alert.svelte";
@@ -15,12 +17,17 @@
     message?: string;
   }
 
-  // Variables
-  export let form: ActionData;
-  let userError: boolean = false;
+  
+  interface Props {
+    // Variables
+    form: ActionData;
+  }
+
+  let { form }: Props = $props();
+  let userError: boolean = $state(false);
   let username = fetchUsername();
   let userApiData = fetchUsers();
-  let alerts: alert[] = [];
+  let alerts: alert[] = $state([]);
 
   // Functions
   async function fetchUsers() {
@@ -59,19 +66,21 @@
   }
 
   // Reactive Blocks
-  $: message = form?.message || "";
+  let message = $derived(form?.message || "");
 
-  $: if (form?.form === "delete" || form?.form === "edit") {
-    alerts.push({
-      type: form?.form,
-      username: form?.user!,
-      fail: !form?.success!,
-      message: form?.message!,
-    });
+  run(() => {
+    if (form?.form === "delete" || form?.form === "edit") {
+      alerts.push({
+        type: form?.form,
+        username: form?.user!,
+        fail: !form?.success!,
+        message: form?.message!,
+      });
 
-    // Reassign variable to make the #each statement reactive
-    alerts = alerts;
-  }
+      // Reassign variable to make the #each statement reactive
+      alerts = alerts;
+    }
+  });
 </script>
 
 <head>
@@ -171,7 +180,7 @@
                                 placeholder="Current Password"
                                 class="input mt-2 input-bordered"
                               />
-                              <button class="mt-2 btn btn-primary" on:click={() => tryCloseEditModal(username)}>Update User</button>
+                              <button class="mt-2 btn btn-primary" onclick={() => tryCloseEditModal(username)}>Update User</button>
                               <p class="w-11/12 mx-auto text-center mt-1">
                                 One or both of "New Username" and "New Password" Fields must be filled out.
                               </p>
@@ -179,7 +188,7 @@
                           </div>
                         </div>
                       </dialog>
-                      <button on:click={() => openModal(username, "edit")}>
+                      <button onclick={() => openModal(username, "edit")}>
                         <Icon icon="mingcute:user-edit-fill" height="18px" class="text-white" />
                       </button>
                     </td>
@@ -191,11 +200,11 @@
                           </h3>
                           <form use:enhance method="POST" action="?/delete">
                             <input id="delete_{username}_input" name="username" class="hidden" value={username} />
-                            <button class="mt-2 btn btn-error" on:click={() => eval(`delete_modal_${username}.close()`)}>Delete User</button>
+                            <button class="mt-2 btn btn-error" onclick={() => eval(`delete_modal_${username}.close()`)}>Delete User</button>
                           </form>
                         </div>
                       </dialog>
-                      <button on:click={() => openModal(username, "delete")}>
+                      <button onclick={() => openModal(username, "delete")}>
                         <Icon icon="mingcute:delete-2-fill" height="18px" class="text-error" />
                       </button>
                     </td>

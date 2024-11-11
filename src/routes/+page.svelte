@@ -1,13 +1,13 @@
 <script lang="ts">
-  let input: HTMLInputElement;
-  let password: string;
-  let response: string;
-  let uploading: boolean | null = null;
+  let input: HTMLInputElement = $state();
+  let password: string = $state();
+  let response: string = $state();
+  let uploading: boolean | null = $state(null);
 
   interface postError {
     message: string;
   }
-  let error: postError | null = null;
+  let error: postError | null = $state(null);
 
   async function uploadFile(file: File) {
     // If the file has no mimetype, treat it like a binary
@@ -54,7 +54,7 @@
       class="input input-bordered mb-2 w-full md:max-w-xs"
     /><br />
     <input bind:this={input} multiple={false} required type="file" name="file" class="file-input file-input-bordered w-full md:max-w-xs" /><br />
-    <button class="btn-block btn-primary btn md:max-w-xs mt-2" type="submit" on:click={submit}>Submit</button><br />
+    <button class="btn-block btn-primary btn md:max-w-xs mt-2" type="submit" onclick={submit}>Submit</button><br />
   </form>
 </div>
 
