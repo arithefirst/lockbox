@@ -7,7 +7,7 @@ export const POST = (async ({ params, request, url }) => {
   // ----------------
   //  Authentication
   // ----------------
-  let password = url.searchParams.get("pw");
+  const password = url.searchParams.get("pw");
   const query = await sql`SELECT * FROM passwords WHERE password = ${password}`;
   if (query.length === 0) {
     return error(401, { message: "Not Authorized" });
@@ -16,7 +16,7 @@ export const POST = (async ({ params, request, url }) => {
   // Create prefix that gets added if a file already exists
   const filename = params.file;
   const stream = request.body;
-  let prefix = fs.existsSync("/usr/share/lockbox/" + filename) ? makeId() + "-" : "";
+  const prefix = fs.existsSync("/usr/share/lockbox/" + filename) ? makeId() + "-" : "";
 
   // Data validation
   if (!filename) return error(400, "No path received");

@@ -9,7 +9,7 @@ async function userLogin(username: string, password: string): Promise<boolean> {
     return false;
   }
 
-  let hash = createHash("sha256")
+  const hash = createHash("sha256")
     .update(userinfo[0]["salt"] + password)
     .digest("hex");
 
