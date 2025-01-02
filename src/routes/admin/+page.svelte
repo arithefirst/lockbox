@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   // Imports
   import DataTable from "$lib/data-table.svelte";
@@ -17,7 +17,6 @@
     message?: string;
   }
 
-  
   interface Props {
     // Variables
     form: ActionData;

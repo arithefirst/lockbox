@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import Icon from "@iconify/svelte";
   import { enhance } from "$app/forms";
