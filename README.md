@@ -1,6 +1,6 @@
 # 🔒 Lockbox 🔒
 
-A password protected dropbox where users given a password can upload a file. Comissioned by [@shibedrill](https://github.com/shibedrill).
+A password-protected dropbox where users given a password can upload a file. Comissioned by [@shibedrill](https://github.com/shibedrill).
 
 ## Installation
 
