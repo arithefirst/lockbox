@@ -6,6 +6,7 @@
   import { page } from "$app/stores";
   import { enhance } from "$app/forms";
   import type { ActionData } from "./$types";
+  import type { PageData } from './$types';
 
   // Types
   interface alert {
@@ -17,29 +18,8 @@
 
   // Variables
   export let form: ActionData;
-  let userError: boolean = false;
-  let username = fetchUsername();
-  let userApiData = fetchUsers();
+  export let data: { data: PageData }
   let alerts: alert[] = [];
-
-  // Functions
-  async function fetchUsers() {
-    const response = await fetch("/api/users");
-    const json = await response.json();
-    if (json["error"] !== null) {
-      userError = true;
-      return null;
-    }
-
-    userError = false;
-    return json["data"];
-  }
-
-  async function fetchUsername() {
-    const response = await fetch("/api/getCurrentUser");
-    const json = await response.json();
-    return json["username"];
-  }
 
   function openModal(username: string, type: string) {
     if (type === "delete" || type === "edit") {
@@ -105,14 +85,12 @@
     <!-- Top-Right -->
     <div class="w-full md:col-span-3 md:pl-3 md:pr-6 md:pt-6 md:pb-3">
       <div class="w-full h-full rounded-2xl bg-base-300 overflow-x-scroll flex justify-center items-center flex-col">
-        {#await username then username}
           <div class="avatar placeholder">
             <div class="bg-neutral text-neutral-content w-32 rounded-full">
-              <span class="text-5xl">{username.charAt(0).toUpperCase()}</span>
+              <span class="text-5xl">{data.current.charAt(0).toUpperCase()}</span>
             </div>
           </div>
-          <h1 class="text-2xl mt-2 text-center w-full">Welcome, {username}</h1>
-        {/await}
+          <h1 class="text-2xl mt-2 text-center w-full">Welcome, {data.current}</h1>
         <form use:enhance method="POST" action="?/logout">
           <button type="submit" class="btn btn-error btn-sm mt-2">Log Out</button>
         </form>
@@ -148,10 +126,8 @@
               <th class="text-center text-base-content">Delete</th>
             </tr>
           </thead>
-          {#await userApiData then users}
-            {#if !userError}
               <tbody>
-                {#each users as username}
+                {#each data.users as username}
                   <tr>
                     <td class="text-center">{username}</td>
                     <td class="text-center">
@@ -202,8 +178,6 @@
                   </tr>
                 {/each}
               </tbody>
-            {/if}
-          {/await}
         </table>
       </div>
     </div>

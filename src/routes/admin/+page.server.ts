@@ -5,13 +5,36 @@ import sql from "$lib/SQL";
 import isAdmin from "$lib/admin-verify.js";
 import userLogin from "$lib/userauth";
 import fs from "node:fs";
+import type { Row } from "postgres";
 
 export async function load({ cookies }) {
   if (!(await isAdmin(cookies))) {
-    // If the user is not logged in send them to login
+    // If the user is not logged in, send them to the login page
     cookies.delete("adminSessionToken", { path: "/" });
     redirect(307, "/admin/login");
   }
+
+  async function getUsers(): Promise<any[] | 'Not Authorized'> {
+    if (await isAdmin(cookies)) {
+      const db = await sql`SELECT username FROM admin_logins`;
+      return db.map((db) => db.username)
+    }
+    return 'Not Authorized';
+  }
+
+  async function getCurrentUser(): Promise<Row | 'Not Authorized'> {
+    if (await isAdmin(cookies)) {
+      const adminToken = cookies.get('adminSessionToken')!;
+      const user = await sql`SELECT username FROM admin_keys WHERE key = ${adminToken}`;
+      return user[0]
+    }
+    return 'Not Authorized';
+  }
+
+  return {
+    users: await getUsers(),
+    current: await getCurrentUser()
+  };
 }
 
 export const actions = {
